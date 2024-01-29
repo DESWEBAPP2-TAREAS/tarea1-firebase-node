@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getDoc, updateDoc, doc } from "firebase/firestore";
-import { db } from '../firebaseConfig/firebaseConfig'; // Asegúrate de importar 'db' correctamente
+import { db } from '../firebaseConfig/firebaseConfig';
 import Swal from 'sweetalert2';
 
 export const Update = () => {
