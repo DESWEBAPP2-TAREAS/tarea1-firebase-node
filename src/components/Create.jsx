@@ -1,19 +1,36 @@
 import { useState } from "react"
 import { collection,addDoc } from "firebase/firestore"
 import { db } from "../firebaseConfig/firebaseConfig"
-import { useNavigate } from "react-router-dom"
+import Swal from 'sweetalert2'
 export const Create = () => {
     const [nombre,setNombre]=useState('')
     const [anio,setAnio]=useState(0)
     const [director,setDirector]=useState('')
-    const navegar=useNavigate()
     const collectionPeliculas=collection(db,'ghibli')
 
-    const registrar = async(e)=>{
-        e.preventDefault()
-        await addDoc(collectionPeliculas,{nombre:nombre, anio:anio, director:director})
-        navegar('/')
+    const registrar = async (e) => {
+        e.preventDefault();
+        try {
+            await addDoc(collectionPeliculas, { nombre: nombre, anio: anio, director: director });
+            Swal.fire({
+                title: '¡Éxito!',
+                text: 'La película ha sido registrada correctamente.',
+                icon: 'success',
+                confirmButtonText: 'Ok',
+                willClose: () => {
+                    window.location.reload();
+                }
+            })
+        } catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al registrar la película.',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            });
+        }
     }
+    
 
   return (
    <>
@@ -25,7 +42,7 @@ export const Create = () => {
             <div className="accordion-item">
                 <div id="flush-collapseOne" className="accordion-collapse collapse " data-bs-parent="#accordionFlushExample">
                     <div className="accordion-body d-flex justify-content-center">
-                       <form onSubmit={registrar()} className="w-75">
+                       <form onSubmit={registrar} className="w-75">
                             <h2 className="text-center mb-4">Registro de peliculas:</h2>
                             <div>
                                 <label className="form-label">Nombre pelicula</label>
@@ -40,7 +57,7 @@ export const Create = () => {
                                 <input className="form-control" type="number"  value={anio} onChange={(e)=>setAnio(e.target.value)}/>
                             </div>
                             <div className="mt-4 d-flex justify-content-center">
-                                <button className="btn btn-primary">Registrar</button>
+                                <button type="submit" className="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">Registrar</button>
                             </div>
                        </form>
                     </div>
